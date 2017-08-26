@@ -61,12 +61,12 @@ Use it, star it, share it and if you feel generous, [donate](https://www.paypal.
 
 Added support for bootstrap alerts using the ? character. Multiple ? will change the alert type see below. 
 
-? {fa-bug} This is a test alert success message
-?? {fa-warning} This is a test alert info  message
-??? This is a test alert primary message
-???? This is a test alert system message
-????? This is a test alert warning message
-?????? This is a test alert danger message
+* ? {fa-bug} This is a test alert success message
+* ?? {fa-warning} This is a test alert info  message
+* ??? This is a test alert primary message
+* ???? This is a test alert system message
+* ????? This is a test alert warning message
+* ?????? This is a test alert danger message
 
 **Font awesome icons**
 
