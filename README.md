@@ -54,3 +54,20 @@ It passes most of the CommonMark tests. Most of the tests that don't pass deal w
 **How can I help?**
 
 Use it, star it, share it and if you feel generous, [donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=528P3NZQMP8N2).
+
+### Intelogie changes
+
+**Alerts**
+
+Added support for bootstrap alerts using the ? character. Multiple ? will change the alert type see below. 
+
+? {fa-bug} This is a test alert success message
+?? {fa-warning} This is a test alert info  message
+??? This is a test alert primary message
+???? This is a test alert system message
+????? This is a test alert warning message
+?????? This is a test alert danger message
+
+**Font awesome icons**
+
+For fontawesome icons, the class name of the icon must be between curly faces example : {fa-bug}
