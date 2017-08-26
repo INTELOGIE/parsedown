@@ -103,6 +103,7 @@ class Parsedown
         '`' => array('FencedCode'),
         '|' => array('Table'),
         '~' => array('FencedCode'),
+        '?' => array('Alert'),
     );
 
     # ~
@@ -495,6 +496,54 @@ class Parsedown
 
             return $Block;
         }
+    }
+    
+    protected function blockAlert($Line)
+    {
+    	$aLevels = [
+    		1 => "alert-success",
+    		2 => "alert-info",
+    		3 => "alert-primary",
+    		4 => "alert-system",
+    		5 => "alert-warning",
+    		6 => "alert-danger",
+    	];
+    	
+    	if (isset($Line['text'][1]))
+    	{
+    		$level = 1;
+    
+    		while (isset($Line['text'][$level]) and $Line['text'][$level] === '?')
+    		{
+    			$level ++;
+    		}
+    
+    		if ($level > 6)
+    		{
+    			return;
+    		}
+    		
+    		$text = trim($Line['text'], '? ');
+    
+    		if (strpos($text, "{")) {
+    			$sIcon = substr($text, strpos($text, "{") + 1);
+    			$sIcon = substr($sIcon, 0, strpos($sIcon, "}"));
+    			$text = str_replace("{" . $sIcon . "}", "<i class=\"fa " . $sIcon . "\"></i>", $subject);
+    		}
+    		
+    		$Block = array(
+    				'element' => array(
+    						'name' => 'div',
+    						'text' => $text,
+    						'handler' => 'line',
+    						'attributes' => [
+    							'class' => 'alert ' . $aLevels[$level]	
+    						],
+    				),
+    		);
+    
+    		return $Block;
+    	}
     }
 
     #
@@ -987,11 +1036,13 @@ class Parsedown
         '`' => array('Code'),
         '~' => array('Strikethrough'),
         '\\' => array('EscapeSequence'),
+        '{' => array('Icon'),
+        '}' => array('Icon'),
     );
 
     # ~
 
-    protected $inlineMarkerList = '!"*_&[:<>`~\\';
+    protected $inlineMarkerList = '{}!"*_&[:<>`~\\';
 
     #
     # ~
@@ -1067,6 +1118,32 @@ class Parsedown
     # ~
     #
 
+    protected function inlineIcon($Excerpt) {
+    	
+    	if (strpos($Excerpt['text'], '}') !== false && strpos($Excerpt['text'], '{') !== false) {
+    		
+    		$text = $Excerpt['text'];
+    		
+    		
+    		$iconClass = substr($text, strpos($text, "{") + 1);
+    		$exten = strpos($iconClass, "}") + 1;
+    		$iconClass = substr($iconClass, 0, strpos($iconClass, "}"));
+    		//$text = str_replace("{" . $sIcon . "}", "<i class=\"fa " . $sIcon . "\"></i>", $subject);
+    		    		
+    		return array(
+    				'extent' => $exten + 1,
+    				'element' => array(
+    						'name' => 'i',
+    						'text' => "",
+    						'attributes' => array(
+    								'class' => 'fa ' . $iconClass,
+    						),
+    				),
+    		);
+    	}
+    	
+    }
+    
     protected function inlineCode($Excerpt)
     {
         $marker = $Excerpt['text'][0];
@@ -1292,6 +1369,9 @@ class Parsedown
             );
         }
     }
+    
+    
+    
 
     protected function inlineSpecialCharacter($Excerpt)
     {
